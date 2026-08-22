@@ -1,0 +1,35 @@
+[package]
+name = "digit-grouping"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.81"
+authors = ["Justin Jones <hey.jones@icloud.com>"]
+license = "MIT"
+description = "Locale-correct digit grouping for integers, from pinned CLDR data, with strict parse-back. No dependencies, no_std, no unsafe code."
+repository = "https://github.com/hey-jj/digit-grouping"
+readme = "README.md"
+keywords = ["localization", "i18n", "formatting", "cldr", "separator"]
+categories = ["internationalization", "value-formatting", "no-std"]
+exclude = ["tools/", "fuzz/", "tests/provenance.rs", ".github/"]
+
+[features]
+default = ["std"]
+std = ["alloc"]
+alloc = []
+float = []
+
+[dependencies]
+
+[dev-dependencies]
+proptest = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+criterion = "0.5"
+
+[[bench]]
+name = "throughput"
+harness = false
+
+[lib]
+name = "digit_grouping"

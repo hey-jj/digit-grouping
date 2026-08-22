@@ -1,0 +1,108 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * *"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - run: cargo build --locked
+      - run: cargo test --locked
+      - run: cargo test --locked --release
+      - run: cargo build --locked --no-default-features
+      - name: core_only_float_feature_compiles
+        run: cargo build --no-default-features --features float
+      - run: cargo test --locked --no-default-features --features alloc
+      - run: cargo test --locked --all-features
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo fmt --check
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.81"
+      # rust-version promises consumers the shipped library, which excludes
+      # tests and dev-dependencies. cargo test --doc compiles
+      # dev-dependencies, so the gate runs on a copy with the
+      # [dev-dependencies] section deleted. The stripped copy resolves a
+      # different set, so --locked stays off here and on for everything else.
+      - run: |
+          mkdir -p /tmp/msrv-copy
+          cp -R . /tmp/msrv-copy/crate
+          python3 - <<'EOF'
+          import re
+          path = "/tmp/msrv-copy/crate/Cargo.toml"
+          text = open(path).read()
+          text = re.sub(r"(?ms)^\[dev-dependencies\].*?(?=^\[|\Z)", "", text)
+          text = re.sub(r"(?ms)^\[\[bench\]\].*?(?=^\[|\Z)", "", text)
+          open(path, "w").write(text)
+          EOF
+          rm -f /tmp/msrv-copy/crate/Cargo.lock
+          cargo +1.81 build --lib --manifest-path /tmp/msrv-copy/crate/Cargo.toml
+          cargo +1.81 test --doc --manifest-path /tmp/msrv-copy/crate/Cargo.toml
+
+  cross-windows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-gnu, x86_64-pc-windows-msvc
+      - run: cargo build --locked --all-features --target x86_64-pc-windows-gnu
+      - run: cargo check --locked --all-features --target x86_64-pc-windows-msvc
+
+  supply-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: |
+          test ! -f build.rs
+          lines=$(cargo tree -e normal --all-features --locked | wc -l)
+          test "$lines" -eq 1
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check bans
+
+  provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --locked --test provenance
+
+  bench-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      # benches/throughput.rs asserts the 4x u64-under-en ratio itself.
+      - run: cargo bench --locked --bench throughput
+
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - run: cargo install cargo-fuzz --locked
+      # 60 seconds per target on push, 10 minutes on the nightly schedule.
+      - run: |
+          seconds=60
+          if [ "${{ github.event_name }}" = "schedule" ]; then seconds=600; fi
+          cargo fuzz run fuzz_parse -- -max_total_time="$seconds"
+          cargo fuzz run fuzz_custom_format -- -max_total_time="$seconds"

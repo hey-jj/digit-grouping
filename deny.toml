@@ -1,0 +1,13 @@
+# cargo-deny policy: the dependency graph is this crate alone.
+# Dev-dependencies are excluded, matching what consumers receive.
+
+[graph]
+all-features = true
+exclude-dev = true
+
+[bans]
+multiple-versions = "deny"
+wildcards = "deny"
+# A non-empty allow list denies everything outside it. The only crate
+# allowed in the normal graph is this one.
+allow = [{ name = "digit-grouping" }]
