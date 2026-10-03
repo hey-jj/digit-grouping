@@ -10,7 +10,7 @@ use core::fmt;
 use crate::buffer::CAPACITY;
 use crate::{sealed, Buffer, Format, Grouping};
 
-/// The formatted float does not fit the 192-byte [`Buffer`].
+/// The formatted float exceeds [`Buffer::CAPACITY`].
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct BufferOverflow;
 

@@ -35,7 +35,7 @@ assert!(parse_formatted::<u8, _>("1,234", &Locale::en).is_err()); // overflow, n
   a CI job regenerates the table and fails on any diff.
 - Standard, Indian and Posix grouping, minimumGroupingDigits honored, digit
   sets beyond ASCII (`ar_EG`, `fa`, `bn`, `mr`), multi-scalar minus signs.
-- `Buffer`: a 192-byte stack buffer, `Copy`, zero heap allocations. A test
+- `Buffer`: a stack buffer, `Copy`, zero heap allocations. A test
   with a counting allocator holds that at zero across every locale.
 - `CustomFormat`: your own separator, minus sign, decimal symbol, grouping
   and minimum grouping digits, validated at construction.
@@ -66,9 +66,7 @@ adds `ToFormattedString`.
 ## Performance
 
 The formatter writes digits from the right in one pass, two at a time from a
-lookup table, straight into the output buffer. The benchmark gate in
-`benches/throughput.rs` requires `Buffer` formatting of `u64` under `en` to
-beat a `to_string`-plus-`insert_str` baseline by roughly 5x.
+lookup table, straight into the output buffer. A benchmark gate in `benches/throughput.rs` holds `Buffer` formatting of `u64` under `en` at or above 4x a `to_string`-plus-`insert_str` baseline, as a regression floor. Formatting speed is on par with num-format's `Buffer`.
 
 ## Feature flags
 

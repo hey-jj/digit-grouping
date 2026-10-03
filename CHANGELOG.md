@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1] - 2026-10-03
+
+- Corrected the README performance section: the benchmark gate floor is 4x
+  (not "roughly 5x") the `to_string`-plus-`insert_str` baseline, and the
+  formatting speed claim reflects a measured comparison with a comparable
+  `Buffer` implementation.
+
 ## [0.1.0] - 2026-08-21
 
 First release.

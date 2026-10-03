@@ -9,7 +9,7 @@ pub(crate) const CAPACITY: usize = 192;
 
 /// A fixed-capacity stack buffer. No heap, `Copy`.
 ///
-/// The capacity holds the longest output this crate can produce: 39 digits
+/// The longest integer output has 39 digits. Formatting those digits
 /// under an Indian-grouping custom format with eight-byte separators and an
 /// eight-byte minus sign is 191 bytes.
 ///
@@ -28,7 +28,7 @@ pub struct Buffer {
 }
 
 impl Buffer {
-    /// The buffer size in bytes. One more than the longest possible output.
+    /// The output capacity in bytes.
     pub const CAPACITY: usize = CAPACITY;
 
     /// An empty buffer.
