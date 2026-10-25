@@ -1,8 +1,0 @@
-/Users/justinjones/Developer/workflows/crate-publish-2026-06/vet3/audit/build4/num-format/crate/fuzz/target/debug/deps/derive_arbitrary-73c5d3bc30302961.d: /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/lib.rs /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/container_attributes.rs /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/field_attributes.rs /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/variant_attributes.rs
-
-/Users/justinjones/Developer/workflows/crate-publish-2026-06/vet3/audit/build4/num-format/crate/fuzz/target/debug/deps/libderive_arbitrary-73c5d3bc30302961.dylib: /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/lib.rs /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/container_attributes.rs /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/field_attributes.rs /Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/variant_attributes.rs
-
-/Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/lib.rs:
-/Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/container_attributes.rs:
-/Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/field_attributes.rs:
-/Users/justinjones/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_arbitrary-1.4.2/src/variant_attributes.rs:
